@@ -16,7 +16,7 @@ func main() {
 	black := flag.String("black", "ais/random/random", "the path to black's executable.")
 
 	whiteTurn := true
-	brd := board.NewBoard()
+	brd := board.NewStartingBoard()
 
 	flag.Parse()
 
@@ -28,10 +28,12 @@ func main() {
 		var stdin io.Reader
 		
 		if (whiteTurn) {
+			fmt.Println("\nwhite move . . . ")
 			cmd = exec.Command(*white)
 			stdin = strings.NewReader("white " + brd.String() + "\n")
 			whiteTurn = false
 		} else {
+			fmt.Println("\nblack move . . . ")
 			cmd = exec.Command(*black)
 			stdin = strings.NewReader("black " + brd.String() + "\n")
 			whiteTurn = true
@@ -53,23 +55,32 @@ func main() {
 		// read the stdout of cmd
 		// should be a single line containing a FromIndex, a ToIndex (this pair represents the move)
 		// followed by 64 "pieces" representing the game board AFTER the move
-		data := make(board.Board, 64)
+		newBoard := make(board.Board, 64)
 		var fromIndex int
 		var toIndex int
 
 		fmt.Fscanf(cmdStdout, "%d %d", &fromIndex, &toIndex)
-
-		fmt.Printf("\n(%d, %d)", fromIndex, toIndex)
+		fmt.Printf("\n(%d, %d)\n", fromIndex, toIndex)
 
 		for i := 0; i < 64; i++ {
-			if i % 8 == 0 {
-				fmt.Print("\n")
-			}
-			fmt.Fscanf(cmdStdout, "%s", &data[i])
-			fmt.Print(data[i] + " ")
+			fmt.Fscanf(cmdStdout, "%s", &newBoard[i])
 		}
 
-		//fmt.Println(data.String())
-		fmt.Print("\n")
+		cmd.Wait()
+
+		brd = newBoard
+		fmt.Println(brd.Display())
+
+		// do all verification here first
+		// @TODO
+		if whiteTurn && len(newBoard.GetAllMoves("white")) == 0 {
+			fmt.Println("black wins")
+			break
+		}
+
+		if !whiteTurn && len(newBoard.GetAllMoves("black")) == 0 {
+			fmt.Println("white wins")
+			break
+		}
 	}
 }
