@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"cfw/board"
+	"github.com/greggoryhz/cfw/board"
 	"math/rand"
 	"time"
 )

@@ -1,7 +1,7 @@
 package board
 
 import (
-	"cfw/pieces"
+	"github.com/greggoryhz/cfw/pieces"
 	"fmt"
 	"strings"
 )

@@ -8,7 +8,7 @@ import (
 	"log"
 	"io"
 
-	"cfw/board"
+	"github.com/greggoryhz/cfw/board"
 )
 
 func main() {
