@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import fileinput
+import sys
+
+board_line = ""
+for line in fileinput.input():
+    board_line = line
+
+board = board_line.split()
+color = board_split[0]
+
+def convert_array_to_response(arr):
+    return ' '.join(arr)
+
+def get_all_moves(board, color):
+    moves = []
+    for i in board:
+        piece = board[i]
+        if color == "white" and piece[i][0] == "W":
+            pass
+        else if color == "black" and piece[i][0] == "B":
+            pass
+    return moves
+
+
+print(0)
+print(0)
+print(convert_array_to_response(board_split[1:]))
+
