@@ -30,17 +30,19 @@ So the starting board for a game is as follows:
     BR BH BB BQ BK BB BH BR BP BP BP BP BP BP BP BP 00 00 00 00 00 00
     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
     00 00 00 00 WP WP WP WP WP WP WP WP WR WH WB WQ WK WB WH WR
-    
-At the start of a game, the starting board is sent (on stdin) to the
-white AI. White then responds (on stdout) with a move
-and the new board configuration. The response should be an integer
-representing the index of the piece to move, a space, an integer
-representing the target of the move, a space, and finally the new
-board in the same format as shown above (but with the move made). This
-move will be validated by the framework. If the move is invalid, it is
-considered a loss. The AIs do not need to flag check, checkmate, or
-stalemate because the framework is aware of these conditions and
-handles the end of the game.
+
+When the board is sent to either agent, it is prefixed with the color
+the agent should be moving for. At the start of a game, the starting
+board is sent (on stdin) to the white AI prefixed with "white " (note
+the space). White then responds (on stdout) with a move and the new
+board configuration. The response should be an integer representing
+the index of the piece to move, a space, an integer representing the
+target of the move, a space, and finally the new board in the same
+format as shown above (but with the move made). This move will be
+validated by the framework. If the move is invalid, it is considered a
+loss. The AIs do not need to flag check, checkmate, or stalemate
+because the framework is aware of these conditions and handles the end
+of the game.
 
 Running the framework
 =====================
