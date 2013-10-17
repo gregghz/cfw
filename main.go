@@ -7,55 +7,16 @@ import (
 	"strings"
 	"log"
 	"io"
+
+	"cfw/board"
 )
-
-const (
-	WhitePawn = "WP"
-	WhiteKnight = "WH"
-	WhiteBishop = "WB"
-	WhiteRook = "WR"
-	WhiteQueen = "WQ"
-	WhiteKing = "WK"
-
-	Empty = "00"
-
-	BlackPawn = "BP"
-	BlackKnight = "BH"
-	BlackBishop = "BB"
-	BlackRook = "BR"
-	BlackQueen = "BQ"
-	BlackKing = "BK"
-)
-
-type Piece string
-
-type Board struct {
-	Squares []string
-
-	readerIndex int
-}
-
-func NewBoard() *Board {
-	return &Board{
-		[]string{
-			BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing, BlackBishop, BlackKnight, BlackRook,
-			BlackPawn, BlackPawn,   BlackPawn,   BlackPawn,  BlackPawn, BlackPawn,   BlackPawn,   BlackPawn,
-			Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,
-			Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,
-			Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,
-			Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,
-			WhitePawn, WhitePawn,   WhitePawn,   WhitePawn,  WhitePawn, WhitePawn,   WhitePawn,   WhitePawn,
-			WhiteRook, WhiteKnight, WhiteBishop, WhiteQueen, WhiteKing, WhiteBishop, WhiteKnight, WhiteRook,
-		}, 0,
-	}
-}
 
 func main() {
-	white := flag.String("white", "bin/random", "the path to white's executable.")
-	black := flag.String("black", "bin/random", "the path to black's executable.")
+	white := flag.String("white", "ais/random/random", "the path to white's executable.")
+	black := flag.String("black", "ais/random/random", "the path to black's executable.")
 
 	whiteTurn := true
-	board := NewBoard()
+	brd := board.NewBoard()
 
 	flag.Parse()
 
@@ -68,11 +29,11 @@ func main() {
 		
 		if (whiteTurn) {
 			cmd = exec.Command(*white)
-			stdin = strings.NewReader("white " + strings.Join(board.Squares, " "))
+			stdin = strings.NewReader("white " + brd.String() + "\n")
 			whiteTurn = false
 		} else {
 			cmd = exec.Command(*black)
-			stdin = strings.NewReader("black " + strings.Join(board.Squares, " "))
+			stdin = strings.NewReader("black " + brd.String() + "\n")
 			whiteTurn = true
 		}
 
@@ -92,18 +53,23 @@ func main() {
 		// read the stdout of cmd
 		// should be a single line containing a FromIndex, a ToIndex (this pair represents the move)
 		// followed by 64 "pieces" representing the game board AFTER the move
-		data := make([]byte, 2*64+63)
+		data := make(board.Board, 64)
 		var fromIndex int
 		var toIndex int
 
-		fmt.Fscanf(cmdStdout, "%d", &fromIndex)
-		fmt.Fscanf(cmdStdout, "%d", &toIndex)
-		
-		_, err = cmdStdout.Read(data)
-		if err != nil {
-			log.Fatal(err)
+		fmt.Fscanf(cmdStdout, "%d %d", &fromIndex, &toIndex)
+
+		fmt.Printf("\n(%d, %d)", fromIndex, toIndex)
+
+		for i := 0; i < 64; i++ {
+			if i % 8 == 0 {
+				fmt.Print("\n")
+			}
+			fmt.Fscanf(cmdStdout, "%s", &data[i])
+			fmt.Print(data[i] + " ")
 		}
 
-		fmt.Println(string(data))
+		//fmt.Println(data.String())
+		fmt.Print("\n")
 	}
 }

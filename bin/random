@@ -2,28 +2,35 @@
 import fileinput
 import sys
 
+from random import choice
+
 board_line = ""
-for line in fileinput.input():
+for line in sys.stdin:
     board_line = line
 
 board = board_line.split()
-color = board_split[0]
+color = board[0]
+board = board[1:]
 
 def convert_array_to_response(arr):
     return ' '.join(arr)
+
+def getPawnMoves(board, i, piece):
+    moves = []
+    
+    return moves
 
 def get_all_moves(board, color):
     moves = []
     for i in board:
         piece = board[i]
-        if color == "white" and piece[i][0] == "W":
-            pass
-        else if color == "black" and piece[i][0] == "B":
-            pass
+        if piece == 'P':
+            moves.append(getPawnMoves(board, i, piece))
+
     return moves
 
+move = choice(get_all_moves(board, color))
 
-print(0)
-print(0)
-print(convert_array_to_response(board_split[1:]))
-
+print(move[0], end=' ')
+print(move[1], end=' ')
+print(convert_array_to_response(board), end=' ')
