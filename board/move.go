@@ -28,8 +28,12 @@ func (board Board) GetAllMoves(color string) []Move {
 		case "WH", "BH": // horses/knights
 			moves = append(moves, board.GetHorseMoves(i)...)
 		case "WB", "BB": // bishops
+			moves = append(moves, board.GetBishopMoves(i)...)
 		case "WQ", "BQ": // queens
+			moves = append(moves, board.GetBishopMoves(i)...)
+			moves = append(moves, board.GetRookMoves(i)...)
 		case "WK", "BK": // kings
+			moves = append(moves, board.GetKingMoves(i)...)
 		}
 	}
 
@@ -98,6 +102,14 @@ func (board Board) GetPawnMoves(i int) []Move {
 	}
 
 	return moves
+}
+
+func (board Board) GetBishopMoves(i int) []Move {
+	return []Move{}
+}
+
+func (board Board) GetKingMoves(i int) []Move {
+	return []Move{}
 }
 
 func (board Board) GetRookMoves(i int) []Move {
