@@ -29,12 +29,20 @@ func (board Board) String() string {
 	return fmt.Sprintf("%s", strings.Join(board, " "))
 }
 
+func FromString(b string) Board {
+	return strings.Split(b, " ")
+}
+
 func (board Board) Display() string {
 	return fmt.Sprintf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
 		strings.Join(board[:8], " "), strings.Join(board[8:16], " "),
 		strings.Join(board[16:24], " "), strings.Join(board[24:32], " "),
 		strings.Join(board[32:40], " "), strings.Join(board[40:48], " "),
 		strings.Join(board[48:56], " "), strings.Join(board[56:64], " "))
+}
+
+func FromDisplay(b string) Board {
+	return FromString(strings.Replace(b, "\n", " ", -1))
 }
 
 func (board Board) MakeMove(mv Move) Board {
