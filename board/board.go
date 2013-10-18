@@ -46,5 +46,14 @@ func (board Board) MakeMove(mv Move) Board {
 	newBoard[mv.Dest] = piece
 	newBoard[mv.Src] = pieces.Empty
 
+	// check for a queen'd pawn
+	if piece[1] == 'P' {
+		if piece[0] == 'W' && mv.Dest < 8 {
+			newBoard[mv.Dest] == pieces.WhiteQueen
+		} else if piece[0] == 'B' && mv.Dest > 55 {
+			newBoard[mv.Dest] == pieces.BlackQueen
+		}
+	}
+
 	return newBoard
 }
