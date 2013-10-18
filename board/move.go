@@ -15,7 +15,7 @@ func colorMatch(piece, color string) bool {
 func (board Board) GetAllMoves(color string) []Move {
 	moves := []Move{}
 
-	for i,piece := range board {
+	for i, piece := range board {
 		if !colorMatch(piece, color) {
 			continue
 		}
@@ -50,49 +50,49 @@ func (board Board) GetPawnMoves(i int) []Move {
 
 	if board[i][0] == 'W' {
 		if i-8 >= 0 && board[i-8] == "00" {
-			moves = append(moves, Move{i, i-8})
+			moves = append(moves, Move{i, i - 8})
 
 			if i > 47 && i < 56 && board[i-16] == "00" {
-				moves = append(moves, Move{i, i-16})
+				moves = append(moves, Move{i, i - 16})
 			}
 		}
-		
+
 		switch i {
 		case 0, 8, 16, 24, 32, 40, 48, 56:
 		default:
-			if i-9 >= 0 && board[i-9] != "00" && !colorMatch(board[i-9],"white") {
-				moves = append(moves, Move{i,i-9});
+			if i-9 >= 0 && board[i-9] != "00" && !colorMatch(board[i-9], "white") {
+				moves = append(moves, Move{i, i - 9})
 			}
 		}
-		
+
 		switch i {
 		case 7, 15, 23, 31, 39, 47, 55, 63:
 		default:
-			if i-7 >= 0 && board[i-7] != "00" && !colorMatch(board[i-7],"white") {
-				moves = append(moves, Move{i,i-7});
+			if i-7 >= 0 && board[i-7] != "00" && !colorMatch(board[i-7], "white") {
+				moves = append(moves, Move{i, i - 7})
 			}
 		}
 	} else { //black
 		if i+8 <= 63 && board[i+8] == "00" {
-			moves = append(moves, Move{i, i+8})
+			moves = append(moves, Move{i, i + 8})
 
 			if i > 7 && i < 16 && board[i+16] == "00" {
-				moves = append(moves, Move{i, i+16})
+				moves = append(moves, Move{i, i + 16})
 			}
 		}
 
 		switch i {
 		case 7, 15, 23, 31, 39, 47, 55, 63:
 		default:
-			if i+9 <= 63 && board[i+9] != "00" && !colorMatch(board[i+9],"black") {
-				moves = append(moves, Move{i,i+9});
+			if i+9 <= 63 && board[i+9] != "00" && !colorMatch(board[i+9], "black") {
+				moves = append(moves, Move{i, i + 9})
 			}
 		}
 		switch i {
 		case 0, 8, 16, 24, 32, 40, 48, 56:
 		default:
-			if i+7 <= 63 && board[i+7] != "00" && !colorMatch(board[i+7],"black") {
-				moves = append(moves, Move{i,i+7});
+			if i+7 <= 63 && board[i+7] != "00" && !colorMatch(board[i+7], "black") {
+				moves = append(moves, Move{i, i + 7})
 			}
 		}
 	}
@@ -103,10 +103,10 @@ func (board Board) GetPawnMoves(i int) []Move {
 func (board Board) GetRookMoves(i int) []Move {
 	moves := []Move{}
 	rook := board[i]
-	
+
 	// up
-	for j := i-8; j >= 0; j -= 8 {
-		if board[j] == pieces.Empty  {
+	for j := i - 8; j >= 0; j -= 8 {
+		if board[j] == pieces.Empty {
 			moves = append(moves, Move{i, j})
 		} else if rook[0] != board[j][0] {
 			moves = append(moves, Move{i, j})
@@ -117,7 +117,7 @@ func (board Board) GetRookMoves(i int) []Move {
 	}
 
 	// down
-	for j := i+8; j <= 63; j += 8 {
+	for j := i + 8; j <= 63; j += 8 {
 		if board[j] == pieces.Empty {
 			moves = append(moves, Move{i, j})
 		} else if rook[0] != board[j][0] {
@@ -129,8 +129,8 @@ func (board Board) GetRookMoves(i int) []Move {
 	}
 
 	// left
-	base_left := (i/8)*8
-	for j := i-1; j >= base_left; j-- {
+	base_left := (i / 8) * 8
+	for j := i - 1; j >= base_left; j-- {
 		if board[j] == pieces.Empty {
 			moves = append(moves, Move{i, j})
 		} else if rook[0] != board[j][0] {
@@ -143,7 +143,7 @@ func (board Board) GetRookMoves(i int) []Move {
 
 	// right
 	base_right := base_left + 7
-	for j := i+1; j <= base_right; j++ {
+	for j := i + 1; j <= base_right; j++ {
 		if board[j] == pieces.Empty {
 			moves = append(moves, Move{i, j})
 		} else if rook[0] != board[j][0] {
@@ -161,39 +161,39 @@ func (board Board) GetHorseMoves(i int) []Move {
 	moves := []Move{}
 
 	if i > 15 { // can move up 2
-		if i % 8 < 7 { // can move right 1
-			moves = append(moves, Move{i, i-15})
+		if i%8 < 7 { // can move right 1
+			moves = append(moves, Move{i, i - 15})
 		}
 
-		if i % 8 > 0 { // can move left 1
-			moves = append(moves, Move{i, i-17})
+		if i%8 > 0 { // can move left 1
+			moves = append(moves, Move{i, i - 17})
 		}
 	}
 
 	if i > 7 { // can move up 1
-		if i % 8 < 6 { // can move right 2
-			moves = append(moves, Move{i, i-6})
+		if i%8 < 6 { // can move right 2
+			moves = append(moves, Move{i, i - 6})
 		}
-		if i % 8 > 1 { // can move left 2
-			moves = append(moves, Move{i, i-10})
+		if i%8 > 1 { // can move left 2
+			moves = append(moves, Move{i, i - 10})
 		}
 	}
 
 	if i < 48 { // can move down 2
-		if i % 8 < 7 { // can move right 1
-			moves = append(moves, Move{i, i+17})
+		if i%8 < 7 { // can move right 1
+			moves = append(moves, Move{i, i + 17})
 		}
-		if i % 8 > 0 { // can move left 1
-			moves = append(moves, Move{i, i+15})
+		if i%8 > 0 { // can move left 1
+			moves = append(moves, Move{i, i + 15})
 		}
 	}
 
 	if i < 56 { // can move down 1
-		if i % 8 < 6 { // can move right 2
-			moves = append(moves, Move{i, i+10})
+		if i%8 < 6 { // can move right 2
+			moves = append(moves, Move{i, i + 10})
 		}
-		if i % 8 > 1 { // can move left 2
-			moves = append(moves, Move{i, i+6})
+		if i%8 > 1 { // can move left 2
+			moves = append(moves, Move{i, i + 6})
 		}
 	}
 

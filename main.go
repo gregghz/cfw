@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"log"
 	"os/exec"
 	"strings"
-	"log"
-	"io"
 
 	"github.com/greggoryhz/cfw/board"
 	"os"
@@ -27,8 +27,8 @@ func main() {
 	for {
 		var cmd *exec.Cmd
 		var stdin io.Reader
-		
-		if (whiteTurn) {
+
+		if whiteTurn {
 			fmt.Println("\nwhite move . . . ")
 			cmd = exec.Command(*white)
 			stdin = strings.NewReader("white " + brd.String() + "\n")

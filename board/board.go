@@ -1,8 +1,8 @@
 package board
 
 import (
-	"github.com/greggoryhz/cfw/pieces"
 	"fmt"
+	"github.com/greggoryhz/cfw/pieces"
 	"strings"
 )
 
@@ -15,12 +15,12 @@ func NewBoard() Board {
 func NewStartingBoard() Board {
 	return Board{
 		pieces.BlackRook, pieces.BlackKnight, pieces.BlackBishop, pieces.BlackQueen, pieces.BlackKing, pieces.BlackBishop, pieces.BlackKnight, pieces.BlackRook,
-		pieces.BlackPawn, pieces.BlackPawn,   pieces.BlackPawn,   pieces.BlackPawn,  pieces.BlackPawn, pieces.BlackPawn,   pieces.BlackPawn,   pieces.BlackPawn,
-		pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,      pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,
-		pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,      pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,
-		pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,      pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,
-		pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,      pieces.Empty,     pieces.Empty,       pieces.Empty,       pieces.Empty,
-		pieces.WhitePawn, pieces.WhitePawn,   pieces.WhitePawn,   pieces.WhitePawn,  pieces.WhitePawn, pieces.WhitePawn,   pieces.WhitePawn,   pieces.WhitePawn,
+		pieces.BlackPawn, pieces.BlackPawn, pieces.BlackPawn, pieces.BlackPawn, pieces.BlackPawn, pieces.BlackPawn, pieces.BlackPawn, pieces.BlackPawn,
+		pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty,
+		pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty,
+		pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty,
+		pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty, pieces.Empty,
+		pieces.WhitePawn, pieces.WhitePawn, pieces.WhitePawn, pieces.WhitePawn, pieces.WhitePawn, pieces.WhitePawn, pieces.WhitePawn, pieces.WhitePawn,
 		pieces.WhiteRook, pieces.WhiteKnight, pieces.WhiteBishop, pieces.WhiteQueen, pieces.WhiteKing, pieces.WhiteBishop, pieces.WhiteKnight, pieces.WhiteRook,
 	}
 }
