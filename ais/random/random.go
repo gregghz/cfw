@@ -24,5 +24,5 @@ func main() {
 	moves := brd.GetAllMoves(color)
 	mv := moves[rand.Intn(len(moves))]
 
-	fmt.Printf("%d %d %s\n", mv.Src, mv.Dest, brd.MakeMove(mv).String())
+	fmt.Printf("%d %d\n", mv.Src, mv.Dest)
 }
