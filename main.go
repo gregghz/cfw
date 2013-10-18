@@ -68,7 +68,16 @@ func main() {
 			fmt.Fscanf(cmdStdout, "%s", &newBoard[i])
 		}
 
-		cmd.Wait()
+		err = cmd.Wait()
+		if err != nil {
+			if whiteTurn {
+				fmt.Println("White crashed with the following error:")
+				log.Fatal(err)
+			} else {
+				fmt.Println("Black crashed with the following error:")
+				log.Fatal(err)
+			}
+		}
 
 		brd = newBoard
 		fmt.Println(brd.Display())
