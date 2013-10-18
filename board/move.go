@@ -1,5 +1,9 @@
 package board
 
+import (
+	"github.com/greggoryhz/cfw/pieces"
+)
+
 type Move struct {
 	Src, Dest int
 }
@@ -20,6 +24,7 @@ func (board Board) GetAllMoves(color string) []Move {
 		case "WP", "BP":
 			moves = append(moves, board.GetPawnMoves(i)...)
 		case "WR", "BR": // rooks
+			moves = append(moves, board.GetRookMoves(i)...)
 		case "WH", "BH": // horses/knights
 			moves = append(moves, board.GetHorseMoves(i)...)
 		case "WB", "BB": // bishops
@@ -42,6 +47,63 @@ func (board Board) GetAllMoves(color string) []Move {
 
 func (board Board) GetPawnMoves(i int) []Move {
 	return []Move{}
+}
+
+func (board Board) GetRookMoves(i int) []Move {
+	moves := []Move{}
+	rook := board[i]
+	
+	// up
+	for j := i-8; j >= 0; j -= 8 {
+		if board[j] == pieces.Empty  {
+			moves = append(moves, Move{i, j})
+		} else if rook[0] != board[j][0] {
+			moves = append(moves, Move{i, j})
+			break
+		} else {
+			break
+		}
+	}
+
+	// down
+	for j := i+8; j <= 63; j += 8 {
+		if board[j] == pieces.Empty {
+			moves = append(moves, Move{i, j})
+		} else if rook[0] != board[j][0] {
+			moves = append(moves, Move{i, j})
+			break
+		} else {
+			break
+		}
+	}
+
+	// left
+	base_left := (i/8)*8
+	for j := i-1; j >= base_left; j-- {
+		if board[j] == pieces.Empty {
+			moves = append(moves, Move{i, j})
+		} else if rook[0] != board[j][0] {
+			moves = append(moves, Move{i, j})
+			break
+		} else {
+			break
+		}
+	}
+
+	// right
+	base_right := base_left + 7
+	for j := i+1; j <= base_right; j++ {
+		if board[j] == pieces.Empty {
+			moves = append(moves, Move{i, j})
+		} else if rook[0] != board[j][0] {
+			moves = append(moves, Move{i, j})
+			break
+		} else {
+			break
+		}
+	}
+
+	return moves
 }
 
 func (board Board) GetHorseMoves(i int) []Move {
