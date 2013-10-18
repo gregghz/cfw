@@ -49,58 +49,47 @@ func (board Board) GetPawnMoves(i int) []Move {
 	moves := []Move{}
 
 	if board[i][0] == 'W' {
-		if i > 47 && i < 56 {
-			if board[i-8] == "00" {
-				moves = append(moves, Move{i,i-8})
-			}
-			if board[i-8] == "00" && board[i-16] == "00" {
-				moves = append(moves, Move{i,i-16})
-			}
-		} else {
-			if i-8 >= 0 && board[i-8] == "00" {
-				moves = append(moves, Move{i,i-8})
+		if i-8 >= 0 && board[i-8] == "00" {
+			moves = append(moves, Move{i, i-8})
+
+			if i > 47 && i < 56 && board[i-16] == "00" {
+				moves = append(moves, Move{i, i-16})
 			}
 		}
+		
 		switch i {
-		case 0: case 8: case 16: case 24:
-		case 32: case 40: case 48: case 56:
+		case 0, 8, 16, 24, 32, 40, 48, 56:
 		default:
 			if i-9 >= 0 && board[i-9] != "00" && !colorMatch(board[i-9],"white") {
 				moves = append(moves, Move{i,i-9});
 			}
 		}
+		
 		switch i {
-		case 7: case 15: case 23: case 31:
-		case 39: case 47: case 55: case 63:
+		case 7, 15, 23, 31, 39, 47, 55, 63:
 		default:
 			if i-7 >= 0 && board[i-7] != "00" && !colorMatch(board[i-7],"white") {
 				moves = append(moves, Move{i,i-7});
 			}
 		}
 	} else { //black
-		if i > 7 && i < 16 {
-			if board[i+8] == "00" {
-				moves = append(moves, Move{i,i+8})
-			}
-			if board[i+8] == "00" && board[i+16] == "00" {
-				moves = append(moves, Move{i,i+16})
-			}
-		} else {
-			if i+8 <= 63 && board[i+8] == "00" {
-				moves = append(moves, Move{i,i+8})
+		if i+8 <= 63 && board[i+8] == "00" {
+			moves = append(moves, Move{i, i+8})
+
+			if i > 7 && i < 16 && board[i+16] == "00" {
+				moves = append(moves, Move{i, i+16})
 			}
 		}
+
 		switch i {
-		case 7: case 15: case 23: case 31:
-		case 39: case 47: case 55: case 63:
+		case 7, 15, 23, 31, 39, 47, 55, 63:
 		default:
 			if i+9 <= 63 && board[i+9] != "00" && !colorMatch(board[i+9],"black") {
 				moves = append(moves, Move{i,i+9});
 			}
 		}
 		switch i {
-		case 0: case 8: case 16: case 24:
-		case 32: case 40: case 48: case 56:
+		case 0, 8, 16, 24, 32, 40, 48, 56:
 		default:
 			if i+7 <= 63 && board[i+7] != "00" && !colorMatch(board[i+7],"black") {
 				moves = append(moves, Move{i,i+7});
