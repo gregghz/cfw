@@ -9,6 +9,7 @@ import (
 	"io"
 
 	"github.com/greggoryhz/cfw/board"
+	"os"
 )
 
 func main() {
@@ -40,6 +41,7 @@ func main() {
 		}
 
 		cmd.Stdin = stdin
+		cmd.Stderr = os.Stderr
 
 		// get the stdout pipe from cmd to read their response
 		cmdStdout, err := cmd.StdoutPipe()
