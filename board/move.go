@@ -182,7 +182,6 @@ func (board Board) GetKingMoves(i int) []Move {
 
 func (board Board) GetRookMoves(i int) []Move {
 	moves := []Move{}
-	//rook := board[i]
 
 	// up
 	moves = append(moves, board.moveRange(i, -8, gte(0))...)
