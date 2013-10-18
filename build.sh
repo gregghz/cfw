@@ -1,4 +1,4 @@
 #!/bin/bash
 
-go build -o randomai ais/random/random.go
+go build -o ais/random/random ais/random/random.go
 go build
