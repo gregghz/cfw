@@ -104,8 +104,76 @@ func (board Board) GetPawnMoves(i int) []Move {
 	return moves
 }
 
+type cmpf func(int)bool
+func gte(n int) cmpf {
+	return func(x int) bool {
+		return x >= n
+	}
+}
+
+func lte(n int) cmpf {
+	return func(x int) bool {
+		return x <= n
+	}
+}
+
+func (board Board) moveRange(i, inc int, cmp cmpf) []Move {
+	moves := []Move{}
+	piece := board[i]
+
+	for j := i + inc; cmp(j); j += inc {
+		if board[j] == pieces.Empty {
+			moves = append(moves, Move{i, j})
+		} else if piece[0] != board[j][0] {
+			moves = append(moves, Move{i, j})
+			break
+		} else {
+			break
+		}
+	}
+
+	return moves
+}
+
+func bishbound_gte(n, bound int) cmpf {
+	return func(x int) bool {
+		switch x {
+		case 7+bound, 15+bound, 23+bound, 31+bound, 39+bound, 47+bound, 55+bound, 63+bound:
+			return false
+		}
+		
+		return x >= n
+	}
+}
+
+func bishbound_lte(n, bound int) cmpf {
+	return func(x int) bool {
+		switch x {
+		case 0+bound, 8+bound, 16+bound, 24+bound, 32+bound, 40+bound, 48+bound, 56+bound, 64+bound:
+			return false
+		}
+		
+		return x <= n
+	}
+}
+
 func (board Board) GetBishopMoves(i int) []Move {
-	return []Move{}
+	moves := []Move{}
+
+	// up right
+	moves = append(moves, board.moveRange(i, -7, bishbound_gte(0, -7))...)
+
+	// up left
+	moves = append(moves, board.moveRange(i, -9, gte(0))...)
+
+	// down right
+	moves = append(moves, board.moveRange(i, 9, lte(63))...)
+
+	// down left
+	moves = append(moves, board.moveRange(i, 7, bishbound_lte(63, 7))...)
+	
+	// return moves
+	return moves
 }
 
 func (board Board) GetKingMoves(i int) []Move {
@@ -114,57 +182,21 @@ func (board Board) GetKingMoves(i int) []Move {
 
 func (board Board) GetRookMoves(i int) []Move {
 	moves := []Move{}
-	rook := board[i]
+	//rook := board[i]
 
 	// up
-	for j := i - 8; j >= 0; j -= 8 {
-		if board[j] == pieces.Empty {
-			moves = append(moves, Move{i, j})
-		} else if rook[0] != board[j][0] {
-			moves = append(moves, Move{i, j})
-			break
-		} else {
-			break
-		}
-	}
+	moves = append(moves, board.moveRange(i, -8, gte(0))...)
 
 	// down
-	for j := i + 8; j <= 63; j += 8 {
-		if board[j] == pieces.Empty {
-			moves = append(moves, Move{i, j})
-		} else if rook[0] != board[j][0] {
-			moves = append(moves, Move{i, j})
-			break
-		} else {
-			break
-		}
-	}
+	moves = append(moves, board.moveRange(i, 8, lte(63))...)
 
 	// left
 	base_left := (i / 8) * 8
-	for j := i - 1; j >= base_left; j-- {
-		if board[j] == pieces.Empty {
-			moves = append(moves, Move{i, j})
-		} else if rook[0] != board[j][0] {
-			moves = append(moves, Move{i, j})
-			break
-		} else {
-			break
-		}
-	}
+	moves = append(moves, board.moveRange(i, -1, gte(base_left))...)
 
 	// right
 	base_right := base_left + 7
-	for j := i + 1; j <= base_right; j++ {
-		if board[j] == pieces.Empty {
-			moves = append(moves, Move{i, j})
-		} else if rook[0] != board[j][0] {
-			moves = append(moves, Move{i, j})
-			break
-		} else {
-			break
-		}
-	}
+	moves = append(moves, board.moveRange(i, 1, lte(base_right))...)
 
 	return moves
 }
