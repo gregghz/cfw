@@ -57,16 +57,15 @@ func main() {
 		// read the stdout of cmd
 		// should be a single line containing a FromIndex, a ToIndex (this pair represents the move)
 		// followed by 64 "pieces" representing the game board AFTER the move
-		newBoard := make(board.Board, 64)
-		var fromIndex int
-		var toIndex int
+		var move board.Move
 
-		fmt.Fscanf(cmdStdout, "%d %d", &fromIndex, &toIndex)
-		fmt.Printf("\n(%d, %d)\n", fromIndex, toIndex)
+		// @TODO
+		// verify the move is valid
+		// get all legal moves for moving color
+		// look up move in this list of legal moves
 
-		for i := 0; i < 64; i++ {
-			fmt.Fscanf(cmdStdout, "%s", &newBoard[i])
-		}
+		fmt.Fscanf(cmdStdout, "%d %d", &move.Src, &move.Dest)
+		fmt.Printf("\n(%d, %d)\n", move.Src, move.Dest)
 
 		err = cmd.Wait()
 		if err != nil {
@@ -79,18 +78,13 @@ func main() {
 			}
 		}
 
-		brd = newBoard
+		brd = brd.MakeMove(move)
 		fmt.Println(brd.Display())
 
-		// do all verification here first
-		// @TODO
-		if whiteTurn && len(newBoard.GetAllMoves("white")) == 0 {
-			fmt.Println("black wins")
-			break
-		}
-
-		if !whiteTurn && len(newBoard.GetAllMoves("black")) == 0 {
-			fmt.Println("white wins")
+		// check for stalemate
+		if (whiteTurn && len(brd.GetAllMoves("white")) == 0) ||
+			(!whiteTurn && len(brd.GetAllMoves("black")) == 0) {
+			fmt.Println("stalemate")
 			break
 		}
 	}
