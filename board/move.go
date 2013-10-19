@@ -117,6 +117,18 @@ func lte(n int) cmpf {
 	}
 }
 
+func bish_cmpf(cmp cmpf, inc, xbound int) cmpf {
+	return func(n int) bool {
+		x := (n-inc) % 8
+
+		if x == xbound {
+			return false
+		}
+
+		return cmp(n)
+	}
+}
+
 func (board Board) moveRange(i, inc int, cmp cmpf) []Move {
 	moves := []Move{}
 	piece := board[i]
@@ -135,49 +147,65 @@ func (board Board) moveRange(i, inc int, cmp cmpf) []Move {
 	return moves
 }
 
-func bishbound_gte(n, bound int) cmpf {
-	return func(x int) bool {
-		switch x {
-		case 7+bound, 15+bound, 23+bound, 31+bound, 39+bound, 47+bound, 55+bound, 63+bound:
-			return false
-		}
-		
-		return x >= n
-	}
-}
 
-func bishbound_lte(n, bound int) cmpf {
-	return func(x int) bool {
-		switch x {
-		case 0+bound, 8+bound, 16+bound, 24+bound, 32+bound, 40+bound, 48+bound, 56+bound, 64+bound:
-			return false
-		}
-		
-		return x <= n
-	}
-}
 
 func (board Board) GetBishopMoves(i int) []Move {
 	moves := []Move{}
 
 	// up right
-	moves = append(moves, board.moveRange(i, -7, bishbound_gte(0, -7))...)
+	moves = append(moves, board.moveRange(i, -7, bish_cmpf(gte(0), -7, 7))...)
 
 	// up left
-	moves = append(moves, board.moveRange(i, -9, gte(0))...)
+	moves = append(moves, board.moveRange(i, -9, bish_cmpf(gte(0), -9, 0))...)
 
 	// down right
-	moves = append(moves, board.moveRange(i, 9, lte(63))...)
+	moves = append(moves, board.moveRange(i, 9, bish_cmpf(lte(63), 9, 7))...)
 
 	// down left
-	moves = append(moves, board.moveRange(i, 7, bishbound_lte(63, 7))...)
+	moves = append(moves, board.moveRange(i, 7, bish_cmpf(lte(63), 7, 0))...)
 	
 	// return moves
 	return moves
 }
 
 func (board Board) GetKingMoves(i int) []Move {
-	return []Move{}
+	moves := []Move{}
+
+	right := func(t int) {
+		switch i {
+		case 7, 15, 23, 31, 39, 47, 55, 63:
+		default:
+			moves = append(moves, Move{i, t})
+		}
+	}
+
+	left := func(t int) {
+		switch i {
+		case 7, 15, 23, 31, 39, 47, 55, 63:
+		default:
+			moves = append(moves, Move{i, t})
+		}
+	}
+
+	// up
+	if i > 7 {
+		moves = append(moves, Move{i, i-8})
+		right(i-7)
+		left(i-9)
+	}
+
+	right(i+1)
+
+	// down
+	if i < 56 {
+		moves = append(moves, Move{i, i+8})
+		right(i+9)
+		left(i-7)
+	}
+
+	left(i-1)
+
+	return moves
 }
 
 func (board Board) GetRookMoves(i int) []Move {

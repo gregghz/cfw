@@ -39,10 +39,109 @@ func TestBishopMoves(t *testing.T) {
 	moves := board.GetBishopMoves(28)
 
 	if len(moves) != 9 {
-		t.Errorf("expect 9 moves, found %d", len(moves))
+		t.Errorf("expected 9 moves, found %d", len(moves))
 	}
 
 	valid_moves := []int{7, 14, 19, 21, 35, 37, 42, 49, 56}
+	checkMoves(t, valid_moves, moves)
+
+	board = FromDisplay(
+`00 00 00 00 00 00 00 WK
+WH 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 BB 00 00 00`)
+
+	moves = board.GetBishopMoves(60)
+
+	if len(moves) != 7 {
+		t.Errorf("expected 7 moves, found %d", len(moves))
+	}
+
+	valid_moves = []int{24, 33, 39, 42, 46, 51, 53}
+	checkMoves(t, valid_moves, moves)
+
+	t.Logf("down right")
+	board = FromDisplay(
+`WB 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00`)
+
+	moves = board.GetBishopMoves(0)
+
+	if len(moves) != 7 {
+		t.Errorf("expected 7 moves, found %d", len(moves))
+	}
+
+	valid_moves = []int{9, 18, 27, 36, 45, 54, 63}
+	checkMoves(t, valid_moves, moves)
+
+	t.Logf("down left")
+	board = FromDisplay(
+`00 00 00 00 00 00 00 WB
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00`)
+
+	moves = board.GetBishopMoves(7)
+
+	if len(moves) != 7 {
+		t.Errorf("expected 7 moves, found %d", len(moves))
+	}
+
+	valid_moves = []int{14, 21, 28, 35, 42, 49, 56}
+	checkMoves(t, valid_moves, moves)
+
+	t.Logf("up right")
+	board = FromDisplay(
+`00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+WB 00 00 00 00 00 00 00`)
+
+	moves = board.GetBishopMoves(56)
+
+	if len(moves) != 7 {
+		t.Errorf("expected 7 moves, found %d", len(moves))
+	}
+
+	valid_moves = []int{49, 42, 35, 28, 21, 14, 7}
+	checkMoves(t, valid_moves, moves)
+
+	t.Logf("up left")
+	board = FromDisplay(
+`00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 WB`)
+
+	moves = board.GetBishopMoves(63)
+
+	if len(moves) != 7 {
+		t.Errorf("expected 7 moves, found %d", len(moves))
+	}
+
+	valid_moves = []int{54, 45, 36, 27, 18, 9, 0}
 	checkMoves(t, valid_moves, moves)
 }
 
