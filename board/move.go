@@ -135,9 +135,9 @@ func (board Board) moveRange(i, inc int, cmp cmpf) []Move {
 
 	for j := i + inc; cmp(j); j += inc {
 		if board[j] == pieces.Empty {
-			moves = append(moves, Move{i, j})
+			moves = board.addValid(moves, Move{i, j})
 		} else if piece[0] != board[j][0] {
-			moves = append(moves, Move{i, j})
+			moves = board.addValid(moves, Move{i, j})
 			break
 		} else {
 			break
@@ -147,7 +147,13 @@ func (board Board) moveRange(i, inc int, cmp cmpf) []Move {
 	return moves
 }
 
+func (board Board) addValid(moves []Move, move Move) []Move {
+	if board[move.Dest] == pieces.Empty || board[move.Src][0] != board[move.Dest][0] {
+		moves = append(moves, move)
+	}
 
+	return moves
+}
 
 func (board Board) GetBishopMoves(i int) []Move {
 	moves := []Move{}
@@ -171,39 +177,49 @@ func (board Board) GetBishopMoves(i int) []Move {
 func (board Board) GetKingMoves(i int) []Move {
 	moves := []Move{}
 
-	right := func(t int) {
-		switch i {
-		case 7, 15, 23, 31, 39, 47, 55, 63:
-		default:
-			moves = append(moves, Move{i, t})
-		}
-	}
-
-	left := func(t int) {
-		switch i {
-		case 7, 15, 23, 31, 39, 47, 55, 63:
-		default:
-			moves = append(moves, Move{i, t})
-		}
-	}
-
-	// up
 	if i > 7 {
-		moves = append(moves, Move{i, i-8})
-		right(i-7)
-		left(i-9)
+		moves = board.addValid(moves, Move{i, i-8})
+
+		switch i {
+		case 7, 15, 23, 31, 39, 47, 55, 63:
+		default:
+			moves = board.addValid(moves, Move{i, i-7})
+		}
+
+		switch i {
+		case 0, 8, 16, 24, 32, 40, 48, 56:
+		default:
+			moves = board.addValid(moves, Move{i, i-9})
+		}
 	}
 
-	right(i+1)
-
-	// down
 	if i < 56 {
-		moves = append(moves, Move{i, i+8})
-		right(i+9)
-		left(i-7)
+		moves = board.addValid(moves, Move{i, i+8})
+
+		switch i {
+		case 7, 15, 23, 31, 39, 47, 55, 63:
+		default:
+			moves = board.addValid(moves, Move{i, i+9})
+		}
+
+		switch i {
+		case 0, 8, 16, 24, 32, 40, 48, 56:
+		default:
+			moves = board.addValid(moves, Move{i, i+7})
+		}
 	}
 
-	left(i-1)
+	switch i {
+	case 7, 15, 23, 31, 39, 47, 55, 63:
+	default:
+		moves = board.addValid(moves, Move{i, i+1})
+	}
+
+	switch i {
+	case 0, 8, 16, 24, 32, 40, 48, 56:
+	default:
+		moves = board.addValid(moves, Move{i, i-1})
+	}
 
 	return moves
 }
@@ -231,41 +247,35 @@ func (board Board) GetRookMoves(i int) []Move {
 func (board Board) GetHorseMoves(i int) []Move {
 	moves := []Move{}
 
-	if i > 15 { // can move up 2
-		if i%8 < 7 { // can move right 1
-			moves = append(moves, Move{i, i - 15})
-		}
+	right1 := lte(6)
+	right2 := lte(5)
+	left1 := gte(1)
+	left2 := gte(2)
 
-		if i%8 > 0 { // can move left 1
-			moves = append(moves, Move{i, i - 17})
+	addIf := func(guard cmpf, move int) {
+		if guard(i%8) {
+			moves = board.addValid(moves, Move{i, move})
 		}
+	}
+	
+	if i > 15 { // can move up 2
+		addIf(right1, i-15)
+		addIf(left1, i-17)
 	}
 
 	if i > 7 { // can move up 1
-		if i%8 < 6 { // can move right 2
-			moves = append(moves, Move{i, i - 6})
-		}
-		if i%8 > 1 { // can move left 2
-			moves = append(moves, Move{i, i - 10})
-		}
+		addIf(right2, i-6)
+		addIf(left2, i-10)
 	}
 
 	if i < 48 { // can move down 2
-		if i%8 < 7 { // can move right 1
-			moves = append(moves, Move{i, i + 17})
-		}
-		if i%8 > 0 { // can move left 1
-			moves = append(moves, Move{i, i + 15})
-		}
+		addIf(right1, i+17)
+		addIf(left1, i+15)
 	}
 
 	if i < 56 { // can move down 1
-		if i%8 < 6 { // can move right 2
-			moves = append(moves, Move{i, i + 10})
-		}
-		if i%8 > 1 { // can move left 2
-			moves = append(moves, Move{i, i + 6})
-		}
+		addIf(right2, i+10)
+		addIf(left2, i+6)
 	}
 
 	return moves
