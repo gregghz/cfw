@@ -12,9 +12,60 @@ func colorMatch(piece, color string) bool {
 	return (piece[0] == 'W' && color == "white") || (piece[0] == 'B' && color == "black")
 }
 
-func (board Board) GetAllMoves(color string) []Move {
-	moves := []Move{}
+func filter(moves []Move, f func(Move) bool) []Move {
+	filtered := []Move{}
 
+	for _, move := range moves {
+		if f(move) {
+			filtered = append(filtered, move)
+		}
+	}
+
+	return filtered
+}
+
+func (board Board) findKing(color string) int {
+	for i, piece := range board {
+		if color == "white" && piece == "WK" {
+			return i
+		} else if color == "black" && piece == "BK" {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func (board Board) exposesNoCheck(move Move) bool {
+	checkBoard := board.MakeMove(move)
+
+	color := "white"
+	if board[move.Src][0] == 'B' {
+		color = "black"
+	}
+
+	// find color king
+	colorKing := checkBoard.findKing(color)
+
+	opColor := "black"
+	if color == "black" {
+		opColor = "white"
+	}
+
+	opMoves := checkBoard.getUnfilteredMoves(opColor)
+
+	for _, opMove := range opMoves {
+		if opMove.Dest == colorKing {
+			return false
+		}
+	}
+	
+	return true
+}
+
+func (board Board) getUnfilteredMoves(color string) []Move {
+	moves := []Move{}
+	
 	for i, piece := range board {
 		if !colorMatch(piece, color) {
 			continue
@@ -38,6 +89,11 @@ func (board Board) GetAllMoves(color string) []Move {
 	}
 
 	return moves
+}
+
+func (board Board) GetAllMoves(color string) []Move {
+	moves := board.getUnfilteredMoves(color)
+	return filter(moves, board.exposesNoCheck)
 }
 
 //  0  1  2  3  4  5  6  7

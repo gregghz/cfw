@@ -286,6 +286,46 @@ func TestKingMoves(t *testing.T) {
 
 	valid_moves := []int{3, 4, 5, 11, 13, 19, 20, 21}
 	checkMoves(t, valid_moves, moves)
+
+	board = FromDisplay(
+`00 00 00 00 00 00 00 00
+00 00 00 00 BK 00 00 00
+00 00 00 00 00 BP 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 WH`)
+
+	moves = board.GetKingMoves(12)
+
+	if len(moves) != 7 {
+		t.Errorf("expected 7 moves, found %d", len(moves))
+	}
+
+	valid_moves = []int{3, 4, 5, 11, 13, 19, 20}
+	checkMoves(t, valid_moves, moves)
+}
+
+func TestGetAllMoves(t *testing.T) {
+	board := FromDisplay(
+`00 00 00 00 00 00 00 00
+00 00 00 00 BK 00 00 00
+00 00 00 00 00 BP 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 WB
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 WK 00 00 00`)
+
+	moves := board.GetAllMoves("black")
+
+	if len(moves) != 7 {
+		t.Errorf("expected 7 moves, found %d", len(moves))
+	}
+
+	valid_moves := []int{3, 4, 5, 11, 13, 19, 20}
+	checkMoves(t, valid_moves, moves)
 }
 
 //  0  1  2  3  4  5  6  7
