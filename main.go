@@ -16,7 +16,7 @@ func main() {
 	white := flag.String("white", "ais/random/random", "the path to white's executable.")
 	black := flag.String("black", "ais/random/random", "the path to black's executable.")
 
-	whiteTurn := true
+	color := "white"
 	brd := board.NewStartingBoard()
 
 	flag.Parse()
@@ -28,16 +28,16 @@ func main() {
 		var cmd *exec.Cmd
 		var stdin io.Reader
 
-		if whiteTurn {
+		if color == "white" {
 			fmt.Println("\nwhite move . . . ")
 			cmd = exec.Command(*white)
 			stdin = strings.NewReader("white " + brd.String() + "\n")
-			whiteTurn = false
+			color = "black"
 		} else {
 			fmt.Println("\nblack move . . . ")
 			cmd = exec.Command(*black)
 			stdin = strings.NewReader("black " + brd.String() + "\n")
-			whiteTurn = true
+			color = "white"
 		}
 
 		cmd.Stdin = stdin
@@ -54,36 +54,32 @@ func main() {
 			log.Fatal(err)
 		}
 
-		// read the stdout of cmd
-		// should be a single line containing a FromIndex, a ToIndex (this pair represents the move)
-		// followed by 64 "pieces" representing the game board AFTER the move
 		var move board.Move
-
-		// @TODO
-		// verify the move is valid
-		// get all legal moves for moving color
-		// look up move in this list of legal moves
 
 		fmt.Fscanf(cmdStdout, "%d %d", &move.Src, &move.Dest)
 		fmt.Printf("\n(%d, %d)\n", move.Src, move.Dest)
 
 		err = cmd.Wait()
 		if err != nil {
-			if whiteTurn {
-				fmt.Println("White crashed with the following error:")
-				log.Fatal(err)
-			} else {
-				fmt.Println("Black crashed with the following error:")
-				log.Fatal(err)
-			}
+			fmt.Printf("%s crashed with the following error:", color)
+			log.Fatal(err)
 		}
+
+		// @TODO
+		// verify the move is valid
+		// get all legal moves for moving color
+		// look up move in this list of legal moves
 
 		brd = brd.MakeMove(move)
 		fmt.Println(brd.Display())
 
+		if brd.Checkmated(color) {
+			fmt.Println("checkmate")
+			break
+		}
+
 		// check for stalemate
-		if (whiteTurn && len(brd.GetAllMoves("white")) == 0) ||
-			(!whiteTurn && len(brd.GetAllMoves("black")) == 0) {
+		if brd.Stalemate(color) {
 			fmt.Println("stalemate")
 			break
 		}

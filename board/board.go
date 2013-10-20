@@ -65,3 +65,63 @@ func (board Board) MakeMove(mv Move) Board {
 
 	return newBoard
 }
+
+func (board Board) Checked(color string) bool {
+	opColor := "white"
+	if color == "white" {
+		opColor = "black"
+	}
+
+	king := board.findKing(color)
+
+	opMoves := board.GetAllMoves(opColor)
+	for _, move := range opMoves {
+		if move.Dest == king {
+			return true
+		}
+	}
+	
+	return false
+}
+
+func (board Board) Checkmated(color string) bool {
+	if colorMoves := board.GetAllMoves(color); board.Checked(color) && len(colorMoves) == 0 {
+		return true
+	}
+
+	return false
+}
+
+func (board Board) Stalemate(color string) bool {
+	if len(board.GetAllMoves(color)) == 0 {
+		return true
+	}
+
+	bishops := 0
+	knights := 0
+
+	for _, piece := range board {
+		switch piece {
+		case "WP", "BP", "WR", "BR", "WQ", "BQ":
+			return false
+		case "WB", "BB":
+			bishops++
+		case "WH", "BH":
+			knights++
+		}
+	}
+
+	if bishops == 1 && knights == 0 {
+		return true
+	}
+
+	if knights == 1 && bishops == 0 {
+		return true
+	}
+
+	if knights == 0 && bishops == 0 {
+		return true
+	}
+
+	return false
+}

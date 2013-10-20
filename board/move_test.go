@@ -328,6 +328,38 @@ func TestGetAllMoves(t *testing.T) {
 	checkMoves(t, valid_moves, moves)
 }
 
+func TestChecked(t *testing.T) {
+	board := FromDisplay(
+`00 00 00 00 BK 00 00 WR
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 WK 00 00 00`)
+
+	if !board.Checked("black") {
+		t.Errorf("not being marked in check")
+	}
+}
+
+func TestCheckmated(t *testing.T) {
+	board := FromDisplay(
+`00 00 00 00 BK 00 00 WR
+00 00 00 00 00 00 00 WR
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 WK 00 00 00`)
+
+	if !board.Checkmated("black") {
+		t.Errorf("not being marked in check")
+	}
+}
+
 //  0  1  2  3  4  5  6  7
 //  8  9 10 11 12 13 14 15
 // 16 17 18 19 20 21 22 23
