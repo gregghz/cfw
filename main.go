@@ -26,9 +26,21 @@ const (
 	BlackCrash = "BlackCrash"
 )
 
-func RunGame(white, black string) Result {
+type Settings struct {
+	final_board *bool
+	intermediate_boards *bool
+	games *int
+}
+
+func RunGame(white, black string, settings *Settings) Result {
 	color := "white"
 	brd := board.NewStartingBoard()
+
+	defer func () {
+		if !(*(settings.intermediate_boards)) && *(settings.final_board) {
+			fmt.Println(brd.Display())
+		}
+	}()
 
 	for {
 		var cmd *exec.Cmd
@@ -63,7 +75,6 @@ func RunGame(white, black string) Result {
 		var move board.Move
 
 		fmt.Fscanf(cmdStdout, "%d %d", &move.Src, &move.Dest)
-		fmt.Printf("\n(%d, %d)\n", move.Src, move.Dest)
 
 		err = cmd.Wait()
 		if err != nil {
@@ -88,7 +99,10 @@ func RunGame(white, black string) Result {
 		}
 
 		brd = brd.MakeMove(move)
-		fmt.Println(brd.Display())
+
+		if *(settings.intermediate_boards) {
+			fmt.Println(brd.Display() + "\n")
+		}
 
 		if brd.Checkmated(color) {
 			if color == "white" {
@@ -120,7 +134,12 @@ func PrintResults(results map[Result]int) {
 func main() {
 	white := flag.String("white", "ais/random/random", "the path to white's executable.")
 	black := flag.String("black", "ais/random/random", "the path to black's executable.")
-	n := flag.Int("games", 1, "how many games to run.")
+
+	settings := &Settings {
+		final_board: flag.Bool("final", true, "show the final game board."),
+		intermediate_boards: flag.Bool("all-boards", true, "show intermediate game boards (implies -final)."),
+		games: flag.Int("games", 1, "how many games to run."),
+	}
 
 	flag.Parse()
 
@@ -137,9 +156,9 @@ func main() {
 		BlackCrash: 0,
 	}
 
-	for i := 0; i < *n; i++ {
+	for i := 0; i < *settings.games; i++ {
 		fmt.Printf("game #%d\n", i+1)
-		results[RunGame(*white, *black)]++
+		results[RunGame(*white, *black, settings)]++
 
 		PrintResults(results)
 	}
