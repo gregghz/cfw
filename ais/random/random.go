@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-type move [2]int
-
 func main() {
 	rand.Seed(time.Now().Unix())
 	brd := board.NewBoard()
