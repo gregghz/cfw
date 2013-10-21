@@ -136,9 +136,9 @@ func main() {
 	black := flag.String("black", "ais/random/random", "the path to black's executable.")
 
 	settings := &Settings {
-		final_board: flag.Bool("final", true, "show the final game board."),
-		intermediate_boards: flag.Bool("all-boards", true, "show intermediate game boards (implies -final)."),
-		games: flag.Int("games", 1, "how many games to run."),
+		flag.Bool("final", true, "show the final game board."),
+		flag.Bool("all-boards", true, "show intermediate game boards (implies -final)."),
+		flag.Int("games", 1, "how many games to run."),
 	}
 
 	flag.Parse()
