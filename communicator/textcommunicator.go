@@ -9,7 +9,7 @@ import (
 
 type TextCommunicator struct{}
 
-func (t *TextCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Reader {
+func (t TextCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Reader {
 	var stdin io.Reader
 	if isWhite {
 		stdin = strings.NewReader("white " + brd.String() + "\n")
@@ -19,7 +19,7 @@ func (t *TextCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Read
 	return stdin
 }
 
-func (t *TextCommunicator) ProcessResponse(out io.Reader) board.Move {
+func (t TextCommunicator) ProcessResponse(out io.Reader) board.Move {
 	var move board.Move
 
 	fmt.Fscanf(out, "%d %d", &move.Src, &move.Dest)

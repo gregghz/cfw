@@ -9,7 +9,7 @@ import (
 
 type JsonCommunicator struct{}
 
-func (j *JsonCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Reader {
+func (j JsonCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Reader {
 	var stdin io.Reader
 	if isWhite {
 		stdin = strings.NewReader("white " + brd.String() + "\n")
@@ -19,7 +19,7 @@ func (j *JsonCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Read
 	return stdin
 }
 
-func (j *JsonCommunicator) ProcessResponse(out io.Reader) board.Move {
+func (j JsonCommunicator) ProcessResponse(out io.Reader) board.Move {
 	var move board.Move
 
 	fmt.Fscanf(out, "%d %d", &move.Src, &move.Dest)

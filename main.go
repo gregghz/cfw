@@ -138,7 +138,7 @@ func PrintResults(results map[Result]int) {
 func main() {
 	white := flag.String("white", "ais/random/random", "the path to white's executable.")
 	black := flag.String("black", "ais/random/random", "the path to black's executable.")
-	//com := flag.String("com","text","What type of communication")
+	com := flag.String("com","text","What type of communication")
 
 	settings := &Settings {
 		flag.Bool("final", true, "show the final game board."),
@@ -151,12 +151,13 @@ func main() {
 	fmt.Printf("white: %s\n", *white)
 	fmt.Printf("black: %s\n", *black)
 
-	//var communicator *c.Communicator
-	//if *com == "json" {
-	//	communicator := c.JsonCommunicator{}
-	//} else {
-		communicator := &c.TextCommunicator{}
-	//}
+	var communicator c.Communicator
+	switch *com  {
+	case "json":
+		communicator = c.JsonCommunicator{}
+	default:
+		communicator = c.TextCommunicator{}
+	}
 
 	results := map[Result]int{
 		WhiteWin: 0,
