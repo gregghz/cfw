@@ -6,9 +6,10 @@ import (
 	"io"
 	"log"
 	"os/exec"
-	"strings"
+	//"strings"
 
 	"github.com/greggoryhz/cfw/board"
+	c "github.com/greggoryhz/cfw/communicator"
 	"os"
 )
 
@@ -32,7 +33,7 @@ type Settings struct {
 	games *int
 }
 
-func RunGame(white, black string, settings *Settings) Result {
+func RunGame(white, black string, settings *Settings, com c.Communicator) Result {
 	color := "white"
 	brd := board.NewStartingBoard()
 
@@ -50,11 +51,13 @@ func RunGame(white, black string, settings *Settings) Result {
 
 		if color == "white" {
 			cmd = exec.Command(white)
-			stdin = strings.NewReader("white " + brd.String() + "\n")
+			stdin = com.GenerateRequest(true,brd)
+			//stdin = strings.NewReader("white " + brd.String() + "\n")
 			color = "black"
 		} else {
 			cmd = exec.Command(black)
-			stdin = strings.NewReader("black " + brd.String() + "\n")
+			stdin = com.GenerateRequest(false,brd)
+			//stdin = strings.NewReader("black " + brd.String() + "\n")
 			color = "white"
 		}
 
@@ -74,7 +77,8 @@ func RunGame(white, black string, settings *Settings) Result {
 
 		var move board.Move
 
-		fmt.Fscanf(cmdStdout, "%d %d", &move.Src, &move.Dest)
+		//fmt.Fscanf(cmdStdout, "%d %d", &move.Src, &move.Dest)
+		move = com.ProcessResponse(cmdStdout)
 
 		err = cmd.Wait()
 		if err != nil {
@@ -134,6 +138,7 @@ func PrintResults(results map[Result]int) {
 func main() {
 	white := flag.String("white", "ais/random/random", "the path to white's executable.")
 	black := flag.String("black", "ais/random/random", "the path to black's executable.")
+	com := flag.String("com","text","What type of communication")
 
 	settings := &Settings {
 		flag.Bool("final", true, "show the final game board."),
@@ -145,6 +150,14 @@ func main() {
 
 	fmt.Printf("white: %s\n", *white)
 	fmt.Printf("black: %s\n", *black)
+
+	var communicator c.Communicator
+	switch *com  {
+	case "json":
+		communicator = c.JsonCommunicator{}
+	default:
+		communicator = c.TextCommunicator{}
+	}
 
 	results := map[Result]int{
 		WhiteWin: 0,
@@ -158,7 +171,7 @@ func main() {
 
 	for i := 0; i < *settings.games; i++ {
 		fmt.Printf("game #%d\n", i+1)
-		results[RunGame(*white, *black, settings)]++
+		results[RunGame(*white, *black, settings,communicator)]++
 
 		PrintResults(results)
 	}
