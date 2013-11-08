@@ -2,7 +2,7 @@ package board
 
 import (
 	"fmt"
-	"github.com/greggoryhz/cfw/pieces"
+	"github.com/gregghz/cfw/pieces"
 	"strings"
 )
 

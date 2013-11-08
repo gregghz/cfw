@@ -1,7 +1,7 @@
 package ais
 
 import (
-	"github.com/greggoryhz/cfw/board"
+	"github.com/gregghz/cfw/board"
 	"math"
 )
 
