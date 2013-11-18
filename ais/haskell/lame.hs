@@ -19,6 +19,6 @@ pickMove color board =
 --	x ++ " ::: " ++ (foldr (\x acc -> x ++ " | " ++ acc) h rst) ++ "\n"
 
 main = do
-	x <- getLine
-	let (y,z) = span (/=' ') x
-	putStr $ pickMove y z
+	input <- getLine
+	let (color,board) = span (/=' ') input
+	putStr $ pickMove color board
