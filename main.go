@@ -9,7 +9,7 @@ import (
 	//"strings"
 
 	"github.com/greggoryhz/cfw/board"
-	c "github.com/greggoryhz/cfw/communicator"
+	c "github.com/greggoryhz/cfw/marshaller"
 	"os"
 )
 
@@ -33,7 +33,7 @@ type Settings struct {
 	games *int
 }
 
-func RunGame(white, black string, settings *Settings, com c.Communicator) Result {
+func RunGame(white, black string, settings *Settings, com c.Marshaller) Result {
 	color := "white"
 	brd := board.NewStartingBoard()
 
@@ -151,12 +151,12 @@ func main() {
 	fmt.Printf("white: %s\n", *white)
 	fmt.Printf("black: %s\n", *black)
 
-	var communicator c.Communicator
+	var marshaller c.Marshaller
 	switch *com  {
 	case "json":
-		communicator = c.JsonCommunicator{}
+		marshaller = c.JsonMarshaller{}
 	default:
-		communicator = c.TextCommunicator{}
+		marshaller = c.TextMarshaller{}
 	}
 
 	results := map[Result]int{
@@ -171,7 +171,7 @@ func main() {
 
 	for i := 0; i < *settings.games; i++ {
 		fmt.Printf("game #%d\n", i+1)
-		results[RunGame(*white, *black, settings,communicator)]++
+		results[RunGame(*white, *black, settings,marshaller)]++
 
 		PrintResults(results)
 	}

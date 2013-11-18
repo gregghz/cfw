@@ -1,4 +1,4 @@
-package communicator
+package marshaller
 
 import (
 	"github.com/greggoryhz/cfw/board"
@@ -7,9 +7,9 @@ import (
 	"fmt"
 )
 
-type JsonCommunicator struct{}
+type JsonMarshaller struct{}
 
-func (j JsonCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Reader {
+func (j JsonMarshaller) GenerateRequest(isWhite bool,brd board.Board) io.Reader {
 	var stdin io.Reader
 	if isWhite {
 		stdin = strings.NewReader("white " + brd.String() + "\n")
@@ -19,7 +19,7 @@ func (j JsonCommunicator) GenerateRequest(isWhite bool,brd board.Board) io.Reade
 	return stdin
 }
 
-func (j JsonCommunicator) ProcessResponse(out io.Reader) board.Move {
+func (j JsonMarshaller) ProcessResponse(out io.Reader) board.Move {
 	var move board.Move
 
 	fmt.Fscanf(out, "%d %d", &move.Src, &move.Dest)
