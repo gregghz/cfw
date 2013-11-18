@@ -1,4 +1,8 @@
 ais/random/random
 ais/greedy/greedy
+ais/haskell/lame.hi
+ais/haskell/lame.o
+ais/haskell/lame
+.DS_Store
 cfw
 *.test
