@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/greggoryhz/cfw/board"
-	"github.com/greggoryhz/cfw/ais"
+	"github.com/gregghz/cfw/board"
+	"github.com/gregghz/cfw/ais"
 )
 
 func main() {

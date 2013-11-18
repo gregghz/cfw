@@ -1,7 +1,7 @@
 package marshaller
 
 import (
-	"github.com/greggoryhz/cfw/board"
+	"github.com/gregghz/cfw/board"
 	"io"
 	"strings"
 	"fmt"

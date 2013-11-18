@@ -1,7 +1,7 @@
 package board
 
 import (
-	"github.com/greggoryhz/cfw/pieces"
+	"github.com/gregghz/cfw/pieces"
 )
 
 type Move struct {

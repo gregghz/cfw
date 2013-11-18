@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	//"strings"
 
-	"github.com/greggoryhz/cfw/board"
-	c "github.com/greggoryhz/cfw/marshaller"
+	"github.com/gregghz/cfw/board"
+	c "github.com/gregghz/cfw/marshaller"
 	"os"
 )
 
