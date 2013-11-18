@@ -1,11 +1,11 @@
-package communicator
+package marshaller
 
 import (
 	"github.com/gregghz/cfw/board"
 	"io"
 )
 
-type Communicator interface {
+type Marshaller interface {
 	GenerateRequest(isWhite bool,b board.Board) io.Reader
 	ProcessResponse(out io.Reader) board.Move
 }
